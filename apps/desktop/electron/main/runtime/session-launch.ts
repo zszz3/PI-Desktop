@@ -41,7 +41,6 @@ import type { PluginRuntime } from "../plugin-runtime";
 import type { UserMcpRuntime } from "../user-mcp";
 import type { RuntimeState } from "./context";
 import type { RuntimeProvider } from "./provider-catalog";
-import type { LoadedSkillDocument } from "../skill-document";
 
 const ErrorCodes = {
   ...SharedErrorCodes,
@@ -221,7 +220,7 @@ export function createSessionLaunchRuntime({
   async function loadUserSkillBody(
     id: string,
     projectPath: string | null,
-  ): Promise<LoadedSkillDocument | null> {
+  ): Promise<{ id: string; name: string; body: string } | null> {
     if (!runtimeState.host || id.includes("/")) return null;
     const result = await runtimeState.host!.call<{
       skill: UserSkillRecord | null;
@@ -232,7 +231,7 @@ export function createSessionLaunchRuntime({
     if (!isActiveInProject(skill, projectPath)) {
       throw new Error(`skill "${id}" is not enabled for this project`);
     }
-    return { id: skill.id, name: skill.name, body: result.body, location: skill.path };
+    return { id: skill.id, name: skill.name, body: result.body };
   }
 
   async function resolveEffectiveCommandShell(): Promise<CommandShellCatalog> {

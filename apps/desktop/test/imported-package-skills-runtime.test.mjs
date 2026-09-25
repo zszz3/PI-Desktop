@@ -97,10 +97,7 @@ function assertSkillCatalog(runtime, imported, bodies, paths) {
     assert.equal(realpathSync(skill.path), realpathSync(join(imported.path, "src", paths.get(skill.name))));
     assert.equal(skill.description, `Test ${skill.name} skill.`);
     assert.deepEqual(runtime.loadSkillBody(skill.id), {
-      id: skill.id,
-      name: skill.name,
-      body: bodies.get(skill.name),
-      location: skill.path,
+      id: skill.id, name: skill.name, body: bodies.get(skill.name),
     });
   }
   return catalog;
